@@ -1,3 +1,7 @@
+"""
+Version: 1.0.3
+Author: Minemetero
+"""
 import math
 
 def input_float(prompt):
