@@ -1,5 +1,5 @@
 """
-Version: 1.0.0
+Version: 1.0.1
 Author: Minemetero
 """
 import matplotlib.pyplot as plt
@@ -9,6 +9,8 @@ def draw_number_line(input_str):
     try:
         # Split the input string by commas to support multiple numbers or formulas
         numbers = [eval(num.strip()) for num in input_str.split(',')]
+        if not all(isinstance(num, (int, float)) for num in numbers):
+            raise ValueError("All inputs must be numbers or valid formulas resulting in numbers.")
     except Exception as e:
         print(f"Error evaluating input: {e}")
         return
@@ -18,11 +20,11 @@ def draw_number_line(input_str):
     max_value = max(numbers)
     
     # Create the number line
-    fig, ax = plt.subplots(figsize=(15, 2))
-    ax.plot(range(min_value, max_value + 1), [0] * (max_value - min_value + 1), marker='|', color='black')
+    fig, ax = plt.subplots(figsize=(max(10, (max_value - min_value) / 2), 2))
+    ax.plot(range(int(min_value), int(max_value) + 1), [0] * (int(max_value) - int(min_value) + 1), marker='|', color='black')
     
     # Plot all numbers on the number line
-    for i in range(min_value, max_value + 1):
+    for i in range(int(min_value), int(max_value) + 1):
         if i not in numbers:
             ax.text(i, 0.1, str(i), horizontalalignment='center')
     
