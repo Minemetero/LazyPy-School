@@ -1,5 +1,5 @@
 """
-Version: 1.0
+Version: 1.0.0
 Author: Minemetero
 """
 import matplotlib.pyplot as plt
