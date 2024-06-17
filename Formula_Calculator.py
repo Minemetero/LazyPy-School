@@ -1,11 +1,18 @@
-"""
-Version: 1.2
-Author: Minemetero
-"""
 import math
 
 def input_float(prompt):
-    return float(input(prompt))
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter a numeric value.")
+
+def solve_quadratic(a, b, c):
+    discriminant = b**2 - 4 * a * c
+    if discriminant < 0:
+        return None
+    sqrt_discriminant = math.sqrt(discriminant)
+    return [(-b + sqrt_discriminant) / (2 * a), (-b - sqrt_discriminant) / (2 * a)]
 
 def calculate_equation_1(unknown):
     if unknown == 'Vf':
@@ -60,12 +67,10 @@ def calculate_equation_2(unknown):
         Vi = input_float("Enter initial velocity (Vi): ")
         Df = input_float("Enter final displacement (Df): ")
         a = input_float("Enter acceleration (a): ")
-        discriminant = Vi**2 + 2 * a * (Df - Di)
-        if discriminant < 0:
+        roots = solve_quadratic(0.5 * a, Vi, Di - Df)
+        if not roots:
             return "No real solution for time."
-        t1 = (-Vi + math.sqrt(discriminant)) / a
-        t2 = (-Vi - math.sqrt(discriminant)) / a
-        t = max(t1, t2)
+        t = max(roots)
         return f"Time (t) = {t}"
 
 def calculate_equation_3(unknown):
@@ -156,14 +161,8 @@ def calculate_equation_6(unknown):
         Vf = input_float("Enter final velocity (Vf): ")
         Di = input_float("Enter initial displacement (Di): ")
         a = input_float("Enter acceleration (a): ")
-        t = (Vf - Di) / a
+        t = (Vf + math.sqrt(Vf**2 - 2 * a * Di)) / a
         return f"Time (t) = {t}"
-    elif unknown == 'a':
-        Vf = input_float("Enter final velocity (Vf): ")
-        Di = input_float("Enter initial displacement (Di): ")
-        t = input_float("Enter time (t): ")
-        a = (Vf - Di) / t
-        return f"Acceleration (a) = {a}"
 
 def calculate_equation_7(unknown):
     if unknown == 'Df':
@@ -173,17 +172,11 @@ def calculate_equation_7(unknown):
         Df = (Vf_squared - Vi_squared) / (2 * a)
         return f"Final displacement (Df) = {Df}"
     elif unknown == 'a':
-        Vi = input_float("Enter initial velocity (Vi): ")
-        Vf = input_float("Enter final velocity (Vf): ")
-        t = input_float("Enter time (t): ")
-        a = (Vf - Vi) / t
+        Vf_squared = input_float("Enter final velocity squared (Vf_squared): ")
+        Vi_squared = input_float("Enter initial velocity squared (Vi_squared): ")
+        Df = input_float("Enter final displacement (Df): ")
+        a = (Vf_squared - Vi_squared) / (2 * Df)
         return f"Acceleration (a) = {a}"
-    elif unknown == 't':
-        Vi = input_float("Enter initial velocity (Vi): ")
-        Vf = input_float("Enter final velocity (Vf): ")
-        a = input_float("Enter acceleration (a): ")
-        t = (Vf - Vi) / a
-        return f"Time (t) = {t}"
 
 def calculate_equation_8(unknown):
     if unknown == 'a':
@@ -240,21 +233,6 @@ equation_handlers = {
     '9': calculate_equation_9
 }
 
-print("Choose a kinematic equation to use:")
-print("1: Vf = Vi + a * t")
-print("2: Df = Di + Vi * t + 0.5 * a * t**2")
-print("3: Vf_squared = Vi**2 + 2 * a * (Df - Di)")
-print("4. avg_D = ((Vi + Vf) / 2) * t")
-print("5. Vf = ((Vi**2 + 2 * a * (Df - Di))**0.5)")
-print("6. Df = Vf * t - 0.5 * a * t**2")
-print("7. Df = (Vf**2 - Vi**2) / (2 * a)")
-print("8. a = (Vf - Vi) / t")
-print("9. avg_D = 0.5 * a * t**2")
-
-# User input to choose equation
-equation_choice = input("Choose the equation number (1-9): ")
-
-# Define the possible unknown variables for each equation
 equation_variables = {
     '1': ['Vf', 'Vi', 'a', 't'],
     '2': ['Df', 'Di', 'Vi', 'a', 't'],
@@ -267,17 +245,35 @@ equation_variables = {
     '9': ['avg_D', 'a', 't']
 }
 
-# Validate the equation choice
-if equation_choice in equation_variables:
-    # Ask for the unknown variable based on the chosen equation
-    unknown_variable = input(f"Choose the unknown variable {equation_variables[equation_choice]}: ")
-    
-    # Ensure the unknown variable is valid for the chosen equation
-    if unknown_variable in equation_variables[equation_choice]:
-        # Calculate the unknown variable
-        result = equation_handlers[equation_choice](unknown_variable)
-        print(result)
-    else:
-        print("Invalid unknown variable. Please restart and choose a valid variable.")
-else:
-    print("Invalid equation choice. Please restart and choose a number between 1 and 9.")
+def main():
+    while True:
+        print("\nChoose a kinematic equation to use:")
+        print("1: Vf = Vi + a * t")
+        print("2: Df = Di + Vi * t + 0.5 * a * t**2")
+        print("3: Vf_squared = Vi**2 + 2 * a * (Df - Di)")
+        print("4: avg_D = ((Vi + Vf) / 2) * t")
+        print("5: Vf = ((Vi**2 + 2 * a * (Df - Di))**0.5)")
+        print("6: Df = Vf * t - 0.5 * a * t**2")
+        print("7: Df = (Vf**2 - Vi**2) / (2 * a)")
+        print("8: a = (Vf - Vi) / t")
+        print("9: avg_D = 0.5 * a * t**2")
+        print("0: Exit")
+
+        equation_choice = input("Choose the equation number (0-9): ")
+
+        if equation_choice == '0':
+            break
+
+        if equation_choice in equation_variables:
+            unknown_variable = input(f"Choose the unknown variable {equation_variables[equation_choice]}: ")
+            
+            if unknown_variable in equation_variables[equation_choice]:
+                result = equation_handlers[equation_choice](unknown_variable)
+                print(result)
+            else:
+                print("Invalid unknown variable. Please restart and choose a valid variable.")
+        else:
+            print("Invalid equation choice. Please restart and choose a number between 1 and 9.")
+
+if __name__ == "__main__":
+    main()
