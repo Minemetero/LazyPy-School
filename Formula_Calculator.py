@@ -1,3 +1,8 @@
+"""
+Version: 1.1
+Author: Minemetero
+"""
+
 import math
 
 print("Choose a kinematic equation to use:")
