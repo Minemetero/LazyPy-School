@@ -2,7 +2,6 @@
 Version: 1.0
 Author: Minemetero
 """
-
 import matplotlib.pyplot as plt
 import numpy as np
 
