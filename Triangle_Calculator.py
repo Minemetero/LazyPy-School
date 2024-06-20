@@ -25,11 +25,11 @@ def draw_triangle(a, b, c):
     tri.speed(2)
 
     # Draw the triangle
-    tri.forward(a)
-    tri.left(180 - angle_B)
-    tri.forward(b)
-    tri.left(180 - angle_C)
-    tri.forward(c)
+    tri.forward(a)  # Draw side a
+    tri.left(180 - angle_B)  # Turn to draw side b
+    tri.forward(b)  # Draw side b
+    tri.left(180 - angle_C)  # Turn to draw side c
+    tri.forward(c)  # Draw side c
 
     # Hide the turtle and display the window
     tri.hideturtle()
@@ -46,6 +46,24 @@ def get_side_length(prompt):
         except ValueError:
             print("Invalid input. Please enter a numeric value.")
 
+def scale_sides(a, b, c, max_length=300):
+    # Find the maximum side length
+    max_side = max(a, b, c)
+    # Scale down if any side is greater than the max_length
+    if max_side > max_length:
+        scale_factor = max_length / max_side
+        a *= scale_factor
+        b *= scale_factor
+        c *= scale_factor
+    # Ensure a minimum size to avoid very small triangles
+    min_length = 50
+    if max(a, b, c) < min_length:
+        scale_factor = min_length / max(a, b, c)
+        a *= scale_factor
+        b *= scale_factor
+        c *= scale_factor
+    return a, b, c
+
 def main():
     print("Enter the lengths of the sides of the triangle:")
     a = get_side_length("Side a: ")
@@ -54,6 +72,8 @@ def main():
 
     # Check if the sides form a valid triangle
     if a + b > c and a + c > b and b + c > a:
+        # Scale the sides to fit the screen
+        a, b, c = scale_sides(a, b, c)
         draw_triangle(a, b, c)
     else:
         print("The entered sides do not form a valid triangle.")
