@@ -4,7 +4,7 @@
 
 You input a numbers or formulas it will show you the number on number line. (Requires **matplotlib** package)
 
-### Formula_Calculator.py
+### VelocityDisplacement_Calculator.py
 
 Some math formula... What you need to do is just input number.
 
