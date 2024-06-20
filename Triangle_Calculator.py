@@ -1,5 +1,5 @@
 """
-Version: 0.0.1
+Version: 1.0.0
 Author: Minemetero
 """
 import turtle
@@ -11,6 +11,13 @@ def draw_triangle(a, b, c):
     angle_B = math.degrees(math.acos((a**2 + c**2 - b**2) / (2 * a * c)))
     angle_C = 180 - angle_A - angle_B
 
+    # Calculate the vertices of the triangle
+    A = (0, 0)
+    B = (a, 0)
+    C_x = b * math.cos(math.radians(angle_A))
+    C_y = b * math.sin(math.radians(angle_A))
+    C = (C_x, C_y)
+
     # Set up the screen
     screen = turtle.Screen()
     screen.title("Triangle Drawing")
@@ -20,16 +27,31 @@ def draw_triangle(a, b, c):
     tri = turtle.Turtle()
     tri.shape("turtle")
     tri.color("black")
-
-    # Set the speed of the turtle
     tri.speed(2)
 
     # Draw the triangle
-    tri.forward(a)  # Draw side a
-    tri.left(180 - angle_B)  # Turn to draw side b
-    tri.forward(b)  # Draw side b
-    tri.left(180 - angle_C)  # Turn to draw side c
-    tri.forward(c)  # Draw side c
+    tri.penup()
+    tri.goto(A)
+    tri.pendown()
+    tri.goto(B)
+    tri.goto(C)
+    tri.goto(A)
+
+    # Label the angles
+    tri.penup()
+    tri.goto(A[0] - 20, A[1] - 20)
+    tri.pendown()
+    tri.write(f"{round(angle_A, 2)}°", align="center", font=("Arial", 12, "normal"))
+
+    tri.penup()
+    tri.goto(B[0] + 20, B[1] - 20)
+    tri.pendown()
+    tri.write(f"{round(angle_B, 2)}°", align="center", font=("Arial", 12, "normal"))
+
+    tri.penup()
+    tri.goto(C[0] + 20, C[1] + 20)
+    tri.pendown()
+    tri.write(f"{round(angle_C, 2)}°", align="center", font=("Arial", 12, "normal"))
 
     # Hide the turtle and display the window
     tri.hideturtle()

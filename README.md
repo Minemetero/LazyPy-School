@@ -10,7 +10,7 @@ Some math formula... What you need to do is just input number.
 
 ### Triangle_Calculator.py
 
-Developing...
+Input the length of each side the calculator output a triangle with degree of each angle. (Requires **turtle** package)
 
 ### InequalityStatement_Calculator.py
 
