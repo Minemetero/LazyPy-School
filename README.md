@@ -1,5 +1,9 @@
 # Every python file is dependence unless it inside a folder together
 
+### Main.py
+
+The entery point. Beta Version
+
 ### NumberLine_Calculator.py
 
 You input a numbers or formulas it will show you the number on number line. (Requires **matplotlib** package)
