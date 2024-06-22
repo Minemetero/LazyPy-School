@@ -3,8 +3,20 @@ Version: beta-0.1
 Author: Minemetero
 """
 import os
+import subprocess
+import sys
 
-def run_script(script_name):
+def install_packages(packages):
+    try:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install'] + packages)
+    except Exception as e:
+        print(f"An error occurred while installing packages: {e}")
+
+def run_script(script_name, required_packages):
+    # Check for and install any required packages
+    if required_packages:
+        install_packages(required_packages)
+    
     try:
         # Execute the selected script
         os.system(f'python {script_name}')
@@ -13,16 +25,16 @@ def run_script(script_name):
 
 def main():
     scripts = {
-        "1": "InequalityStatement_Calculator.py",
-        "2": "NumberLine_Calculator.py",
-        "3": "Triangle_Calculator.py",
-        "4": "VelocityDisplacement_Calculator.py"
+        "1": {"name": "InequalityStatement_Calculator.py", "packages": ["sympy"]},
+        "2": {"name": "NumberLine_Calculator.py", "packages": ["matplotlib","numpy"]},
+        "3": {"name": "Triangle_Calculator.py", "packages": ["turtle"]},
+        "4": {"name": "VelocityDisplacement_Calculator.py", "packages": []}
     }
     
     while True:
         print("\nPlease choose a script to run:")
         for key, value in scripts.items():
-            print(f"{key}: {value}")
+            print(f"{key}: {value['name']}")
 
         choice = input("\nEnter the number of the script you want to run (or 'q' to quit): ")
 
@@ -30,7 +42,7 @@ def main():
             print("Exiting...")
             break
         elif choice in scripts:
-            run_script(scripts[choice])
+            run_script(scripts[choice]["name"], scripts[choice]["packages"])
         else:
             print("Invalid choice. Please try again.")
 
