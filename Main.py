@@ -1,5 +1,5 @@
 """
-Version: beta-0.1
+Version: 1.0.0
 Author: Minemetero
 """
 import os
