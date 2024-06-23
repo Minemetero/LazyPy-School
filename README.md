@@ -1,6 +1,4 @@
-# Every python file is dependence unless it inside a folder together
-
-### Main.py
+## Main.py
 
 The entery point. Beta Version
 
