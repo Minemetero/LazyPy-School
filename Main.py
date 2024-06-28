@@ -1,5 +1,5 @@
 """
-Version: 1.1.0
+Version: 1.1.1
 Author: Minemetero
 """
 import os
@@ -20,11 +20,22 @@ def install_packages(packages):
     except Exception as e:
         print(f"An error occurred while installing packages: {e}")
 
+def get_package_import_name(package):
+    package_import_name_mapping = {
+        "numpy": "numpy",
+        "sympy": "sympy",
+        "matplotlib": "matplotlib",
+        "turtle": "turtle"
+        # Add other mappings if needed
+    }
+    return package_import_name_mapping.get(package, package)
+
 def run_script(script_path, required_packages):
     packages_to_install = []
 
     for package in required_packages:
-        if not check_package_installed(package):
+        package_import_name = get_package_import_name(package)
+        if not check_package_installed(package_import_name):
             print(f"The package '{package}' is not installed.")
             install = input(f"Do you want to install '{package}'? (y/n): ").strip().lower()
             if install == 'y':
@@ -66,3 +77,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

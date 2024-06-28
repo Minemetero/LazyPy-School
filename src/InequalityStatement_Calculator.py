@@ -2,17 +2,17 @@
 Version: 1.0.0
 Author: Minemetero
 """
-from sympy import symbols, solve, sympify
+import sympy
 
 def solve_inequality(inequality_str):
     # Define the variable
-    x = symbols('x')
+    x = sympy.symbols('x')
     
     # Parse the inequality string into a sympy expression
-    inequality = sympify(inequality_str)
+    inequality = sympy.sympify(inequality_str)
     
     # Solve the inequality
-    solution = solve(inequality, x)
+    solution = sympy.solve(inequality, x)
     
     return solution
 
