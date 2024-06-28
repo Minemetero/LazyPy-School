@@ -1,10 +1,18 @@
 """
-Version: 1.0.1
+Version: 1.1.0
 Author: Minemetero
 """
 import os
 import subprocess
 import sys
+import importlib
+
+def check_package_installed(package):
+    try:
+        importlib.import_module(package)
+        return True
+    except ImportError:
+        return False
 
 def install_packages(packages):
     try:
@@ -12,14 +20,24 @@ def install_packages(packages):
     except Exception as e:
         print(f"An error occurred while installing packages: {e}")
 
-def run_script(script_name, required_packages):
-    # Check for and install any required packages
-    if required_packages:
-        install_packages(required_packages)
+def run_script(script_path, required_packages):
+    packages_to_install = []
+
+    for package in required_packages:
+        if not check_package_installed(package):
+            print(f"The package '{package}' is not installed.")
+            install = input(f"Do you want to install '{package}'? (y/n): ").strip().lower()
+            if install == 'y':
+                packages_to_install.append(package)
+            else:
+                print(f"Skipping the installation of '{package}'.")
+
+    if packages_to_install:
+        install_packages(packages_to_install)
     
     try:
         # Execute the selected script
-        os.system(f'python {script_name}')
+        os.system(f'python {script_path}')
     except Exception as e:
         print(f"An error occurred while running the script: {e}")
 
