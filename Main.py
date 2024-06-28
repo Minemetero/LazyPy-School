@@ -1,5 +1,5 @@
 """
-Version: 1.0.0
+Version: 1.0.1
 Author: Minemetero
 """
 import os
@@ -25,10 +25,10 @@ def run_script(script_name, required_packages):
 
 def main():
     scripts = {
-        "1": {"name": "InequalityStatement_Calculator.py", "packages": ["sympy"]},
-        "2": {"name": "NumberLine_Calculator.py", "packages": ["matplotlib","numpy"]},
-        "3": {"name": "Triangle_Calculator.py", "packages": ["turtle"]},
-        "4": {"name": "VelocityDisplacement_Calculator.py", "packages": []}
+        "1": {"name": "InequalityStatement_Calculator","path": "src/InequalityStatement_Calculator.py", "packages": ["sympy"]},
+        "2": {"name": "NumberLine_Calculator", "path": "src/NumberLine_Calculator.py","packages": ["matplotlib","numpy"]},
+        "3": {"name": "Triangle_Calculator", "path": "src/Triangle_Calculator.py","packages": ["turtle"]},
+        "4": {"name": "VelocityDisplacement_Calculator", "path": "src/VelocityDisplacement_Calculator.py","packages": []}
     }
     
     while True:
@@ -42,7 +42,7 @@ def main():
             print("Exiting...")
             break
         elif choice in scripts:
-            run_script(scripts[choice]["name"], scripts[choice]["packages"])
+            run_script(scripts[choice]["path"], scripts[choice]["packages"])
         else:
             print("Invalid choice. Please try again.")
 
