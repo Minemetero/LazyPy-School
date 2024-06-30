@@ -1,51 +1,18 @@
 """
-Version: 1.1.1
+Version: 1.1.2
 Author: Minemetero
 """
 import os
 import subprocess
 import sys
-import importlib
 
-def check_package_installed(package):
+def install_packages(requirements_file):
     try:
-        importlib.import_module(package)
-        return True
-    except ImportError:
-        return False
-
-def install_packages(packages):
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install'] + packages)
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_file])
     except Exception as e:
         print(f"An error occurred while installing packages: {e}")
 
-def get_package_import_name(package):
-    package_import_name_mapping = {
-        "numpy": "numpy",
-        "sympy": "sympy",
-        "matplotlib": "matplotlib",
-        "turtle": "turtle"
-        # Add other mappings if needed
-    }
-    return package_import_name_mapping.get(package, package)
-
-def run_script(script_path, required_packages):
-    packages_to_install = []
-
-    for package in required_packages:
-        package_import_name = get_package_import_name(package)
-        if not check_package_installed(package_import_name):
-            print(f"The package '{package}' is not installed.")
-            install = input(f"Do you want to install '{package}'? (y/n): ").strip().lower()
-            if install == 'y':
-                packages_to_install.append(package)
-            else:
-                print(f"Skipping the installation of '{package}'.")
-
-    if packages_to_install:
-        install_packages(packages_to_install)
-    
+def run_script(script_path):
     try:
         # Execute the selected script
         os.system(f'python {script_path}')
@@ -54,10 +21,10 @@ def run_script(script_path, required_packages):
 
 def main():
     scripts = {
-        "1": {"name": "InequalityStatement_Calculator","path": "src/InequalityStatement_Calculator.py", "packages": ["sympy"]},
-        "2": {"name": "NumberLine_Calculator", "path": "src/NumberLine_Calculator.py","packages": ["matplotlib","numpy"]},
-        "3": {"name": "Triangle_Calculator", "path": "src/Triangle_Calculator.py","packages": ["turtle"]},
-        "4": {"name": "VelocityDisplacement_Calculator", "path": "src/VelocityDisplacement_Calculator.py","packages": []}
+        "1": {"name": "InequalityStatement_Calculator", "path": "src/InequalityStatement_Calculator.py", "requirements": "requirements/InequalityStatement.txt"},
+        "2": {"name": "NumberLine_Calculator", "path": "src/NumberLine_Calculator.py", "requirements": "requirements/NumberLine.txt"},
+        "3": {"name": "Triangle_Calculator", "path": "src/Triangle_Calculator.py", "requirements": "requirements/Triangle.txt"},
+        "4": {"name": "VelocityDisplacement_Calculator", "path": "src/VelocityDisplacement_Calculator.py", "requirements": "requirements/VelocityDisplacement.txt"}
     }
     
     while True:
@@ -71,10 +38,15 @@ def main():
             print("Exiting...")
             break
         elif choice in scripts:
-            run_script(scripts[choice]["path"], scripts[choice]["packages"])
+            requirements_file = scripts[choice]["requirements"]
+            if os.path.exists(requirements_file):
+                print(f"Installing packages from {requirements_file}...")
+                install_packages(requirements_file)
+            else:
+                print(f"No requirements file found for {scripts[choice]['name']}.")
+            run_script(scripts[choice]["path"])
         else:
             print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
-    
