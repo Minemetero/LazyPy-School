@@ -1,5 +1,5 @@
 """
-Version: 1.1.2
+Version: 1.1.3
 Author: Minemetero
 """
 import os
@@ -7,16 +7,22 @@ import subprocess
 import sys
 
 def install_packages(requirements_file):
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_file])
-    except Exception as e:
-        print(f"An error occurred while installing packages: {e}")
+    if os.path.exists(requirements_file):
+        try:
+            subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', requirements_file], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while installing packages: {e}")
+    else:
+        print(f"Requirements file '{requirements_file}' not found. Skipping package installation.")
 
 def run_script(script_path):
     try:
-        # Execute the selected script
-        os.system(f'python {script_path}')
-    except Exception as e:
+        result = subprocess.run([sys.executable, script_path], check=True)
+        if result.returncode == 0:
+            print(f"Script {script_path} executed successfully.")
+        else:
+            print(f"Script {script_path} failed with return code {result.returncode}.")
+    except subprocess.CalledProcessError as e:
         print(f"An error occurred while running the script: {e}")
 
 def main():
@@ -38,13 +44,11 @@ def main():
             print("Exiting...")
             break
         elif choice in scripts:
-            requirements_file = scripts[choice]["requirements"]
-            if os.path.exists(requirements_file):
-                print(f"Installing packages from {requirements_file}...")
-                install_packages(requirements_file)
-            else:
-                print(f"No requirements file found for {scripts[choice]['name']}.")
-            run_script(scripts[choice]["path"])
+            script_info = scripts[choice]
+            print(f"Installing packages from {script_info['requirements']}...")
+            install_packages(script_info["requirements"])
+            print(f"Running script {script_info['path']}...")
+            run_script(script_info["path"])
         else:
             print("Invalid choice. Please try again.")
 
