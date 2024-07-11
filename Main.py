@@ -1,5 +1,5 @@
 """
-Version: 1.1.3
+Version: 1.2.0
 Author: Minemetero
 """
 import os
@@ -25,13 +25,24 @@ def run_script(script_path):
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while running the script: {e}")
 
+def discover_scripts(script_dir, requirements_dir):
+    scripts = {}
+    script_files = [f for f in os.listdir(script_dir) if f.endswith('.py')]
+    
+    for index, script_file in enumerate(script_files, start=1):
+        script_name = script_file.replace('.py', '')
+        scripts[str(index)] = {
+            "name": script_name,
+            "path": os.path.join(script_dir, script_file),
+            "requirements": os.path.join(requirements_dir, f"{script_name}.txt")
+        }
+    return scripts
+
 def main():
-    scripts = {
-        "1": {"name": "InequalityStatement_Calculator", "path": "src/InequalityStatement_Calculator.py", "requirements": "requirements/InequalityStatement.txt"},
-        "2": {"name": "NumberLine_Calculator", "path": "src/NumberLine_Calculator.py", "requirements": "requirements/NumberLine.txt"},
-        "3": {"name": "Triangle_Calculator", "path": "src/Triangle_Calculator.py", "requirements": "requirements/Triangle.txt"},
-        "4": {"name": "VelocityDisplacement_Calculator", "path": "src/VelocityDisplacement_Calculator.py", "requirements": "requirements/VelocityDisplacement.txt"}
-    }
+    script_dir = 'src'
+    requirements_dir = 'requirements'
+
+    scripts = discover_scripts(script_dir, requirements_dir)
     
     while True:
         print("\nPlease choose a script to run:")
