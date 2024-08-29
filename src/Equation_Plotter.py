@@ -1,5 +1,5 @@
 """
-Version: 0.1.0
+Version: 0.1.1
 Author: Minemetero
 """
 import numpy as np
@@ -57,26 +57,32 @@ def get_range(prompt):
 def main():
     print("Welcome to the Equation Plotter!")
     
-    # Input equation from user
     while True:
-        user_equation = input("Enter the equation in terms of 'x' (e.g., x**2 + 2*x + 1): ")
+        # Input equation from user
+        user_equation = input("Enter the equation in terms of 'x' (e.g., x**2 + 2*x + 1), or 'q' to quit: ")
+        
+        if user_equation.lower() in ['q', 'quit']:
+            print("Goodbye!")
+            break
+        
         try:
             # Test if the equation can be evaluated
             x = np.linspace(-10, 10, 10)
             y = eval(user_equation)
             if isinstance(y, np.ndarray):
-                break
+                pass
         except Exception as e:
             print(f"Invalid equation: {e}")
-    
-    # Get x range from user
-    x_range = get_range("Enter the x range as two numbers separated by a comma (e.g., -10, 10): ")
-
-    # Get y range from user
-    y_range = get_range("Enter the y range as two numbers separated by a comma (e.g., -10, 10): ")
-
-    # Plot the equation
-    plot_equation(user_equation, x_range, y_range)
+            continue
+        
+        # Get x range from user
+        x_range = get_range("Enter the x range as two numbers separated by a comma (e.g., -10, 10): ")
+        
+        # Get y range from user
+        y_range = get_range("Enter the y range as two numbers separated by a comma (e.g., -10, 10): ")
+        
+        # Plot the equation
+        plot_equation(user_equation, x_range, y_range)
 
 if __name__ == "__main__":
     main()
